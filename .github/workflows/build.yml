@@ -2,6 +2,8 @@ name: Build Aiva APK
 on:
   push:
   workflow_dispatch:
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,7 +21,7 @@ jobs:
           if [ -f Aiva.zip ]; then unzip -oq Aiva.zip; fi
           cd Aiva
           gradle assembleDebug --no-daemon
-      - uses: actions/upload-artifact@v4
+      - uses: softprops/action-gh-release@v2
         with:
-          name: Aiva-apk
-          path: Aiva/app/build/outputs/apk/debug/app-debug.apk
+          tag_name: v${{ github.run_number }}
+          files: Aiva/app/build/outputs/apk/debug/app-debug.apk
